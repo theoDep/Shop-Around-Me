@@ -14,24 +14,32 @@ export default function Fav() {
     },
   } = useAuthContext();
 
-  const getFavorite = () => {
-    axios
-      .get(
+  const getFavorite = async () => {
+    try {
+      const response = await axios.get(
         `${
           import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
         }/shop_user/${id}`
-      )
-      .then((response) => setFav(response.data));
+      );
+
+      setFav(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const removeFavorite = (shopId) => {
-    axios
-      .delete(
+  const removeFavorite = async (shopId) => {
+    try {
+      await axios.delete(
         `${
           import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
         }/shop_user/shops/${shopId}/user/${id}`
-      )
-      .then(() => getFavorite());
+      );
+
+      getFavorite();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

@@ -15,23 +15,22 @@ export default function LoginForm() {
   } = useForm();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = getValues();
-    axios
-      .post(
+    try {
+      const response = await axios.post(
         "/api/login",
         { email, password },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setLoginData({ ...res.data });
-          navigate("/home");
-        }
-      });
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setLoginData({ ...response.data });
+        navigate("/home");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
