@@ -22,29 +22,28 @@ export default function ShopDetails() {
 
   const [shop, setShop] = useState();
 
-  const getShop = () => {
-    axios
-      .get(
+  const getShop = async () => {
+    try {
+      const response = await axios.get(
         `${
           import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
         }/shops/${id}`
-      )
-      .then((response) => response.data)
-
-      .then((data) =>
-        axios
-          .get(
-            `${
-              import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
-            }/address/reverse/?lon=${data.x}&lat=${data.y}`
-          )
-          .then((response) => {
-            setShop({
-              ...data,
-              address: response.data.features[0].properties.label,
-            });
-          })
       );
+
+      const { data } = response;
+
+      const responseAddress = await axios.get(
+        `${
+          import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
+        }/address/reverse/?lon=${data.x}&lat=${data.y}`
+      );
+
+      const address = responseAddress.data.features[0].properties.label;
+
+      setShop({ ...data, address });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -57,33 +56,41 @@ export default function ShopDetails() {
     loginData: { user },
   } = useAuthContext();
 
-  const getFavorite = () => {
-    axios
-      .get(
+  const getFavorite = async () => {
+    try {
+      const response = await axios.get(
         `${
           import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
         }/shop_user/${user.id}`
-      )
-      .then((response) => setFav(response.data));
+      );
+
+      setFav(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const isFavorite = () => {
     return fav.some((favorite) => favorite.shop_id === parseInt(id, 10));
   };
 
-  const removeFavorite = () => {
-    axios
-      .delete(
+  const removeFavorite = async () => {
+    try {
+      await axios.delete(
         `${
           import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
         }/shop_user/shops/${id}/user/${user.id}`
-      )
-      .then(() => getFavorite());
+      );
+
+      getFavorite();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const addFavorite = () => {
-    axios
-      .post(
+  const addFavorite = async () => {
+    try {
+      await axios.post(
         `${
           import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000"
         }/shop_user/`,
@@ -91,8 +98,12 @@ export default function ShopDetails() {
           shop_id: parseInt(id, 10),
           user_id: parseInt(user.id, 10),
         }
-      )
-      .then(() => getFavorite());
+      );
+
+      getFavorite();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRemove = () => {
