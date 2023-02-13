@@ -4,19 +4,18 @@ export default function ShopsEdit() {
   return (
     <Edit>
       <SimpleForm>
-        <TextInput source="id" />
-        <TextInput source="name" />
-        <TextInput source="brand" />
-        <TextInput source="type" />
-        <TextInput source="address" />
-        <TextInput source="website" />
-        <TextInput source="email" />
-        <TextInput source="phone" />
-        <TextInput source="fb_page" />
-        <TextInput source="insta_page" />
-        <NumberInput source="x" />
-        <NumberInput source="y" />
-        <TextInput source="img_url" />
+        <TextInput source="name" fullWidth />
+        <TextInput source="brand" fullWidth />
+        <TextInput source="type" fullWidth />
+        <TextInput source="address" fullWidth />
+        <TextInput source="website" fullWidth />
+        <TextInput source="email" fullWidth />
+        <TextInput source="phone" fullWidth />
+        <TextInput source="fb_page" fullWidth />
+        <TextInput source="insta_page" fullWidth />
+        <NumberInput source="x" fullWidth />
+        <NumberInput source="y" fullWidth />
+        <TextInput source="img_url" fullWidth />
       </SimpleForm>
     </Edit>
   );
