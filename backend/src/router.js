@@ -82,14 +82,19 @@ router.put("/users/:id", validateUser, UserController.edit);
 router.put("/users/:id/savings", UserController.edit);
 router.delete("/users/:id", UserController.delete);
 
-router.get("/address/reverse", (req, res) => {
+router.get("/address/reverse", async (req, res) => {
   const { lon, lat } = req.query;
 
-  axios
-    .get(`https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`)
-    .then((response) => {
-      res.send(response.data);
-    });
+  try {
+    const response = await axios.get(
+      `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
+    );
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.post("/login", handleLogin);
