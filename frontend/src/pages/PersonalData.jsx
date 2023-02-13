@@ -51,12 +51,12 @@ export default function PersonnalData() {
         }`,
         userData
       )
-      .then((response) => response);
+      .then(() => getUser());
   };
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
 
   const handleSave = () => {
     setEditedUser(false);
